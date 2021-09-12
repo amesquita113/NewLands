@@ -5,6 +5,22 @@ import asciiPanel.AsciiPanel;
 
 public class PlayScreen implements Screen {
 
+    private World world;
+    private int centerX;
+    private int centerY;
+    private int screenWidth;
+    private int screenHeight;
+
+    public PlayScreen() {
+        screenWidth = 80;
+        screenHeight = 21;
+        createWorld();
+    }
+
+    private void createWorld() {
+        world = new WorldBuilder(90, 31).makeCaves().build();
+    }
+
     public void displayOutput(AsciiPanel terminal) {
         terminal.write("This is the play screen.", 1, 1);
         terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 22);
@@ -18,4 +34,5 @@ public class PlayScreen implements Screen {
 
         return this;
     }
+
 }
