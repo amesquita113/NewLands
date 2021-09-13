@@ -1,6 +1,8 @@
 package NewLands;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 public class World {
     private Tile[][] tiles;
@@ -10,12 +12,21 @@ public class World {
     private int height;
     public int height() { return height; }
 
+    private List<Creature> creatures;
+
     public World(Tile[][] tiles){
         this.tiles = tiles;
         this.width = tiles.length;
         this.height = tiles[0].length;
     }
 
+    public Creature creature(int x, int y) {
+        for (Creature c : creatures) {
+            if (c.x == x && c.y == y)
+                return c;
+        }
+        return null;
+    }
 
     public Tile tile(int x, int y){
         if (x < 0 || x >= width || y < 0 || y >= height)
@@ -46,9 +57,21 @@ public class World {
             y = (int)(Math.random() * height);
         }
 
-        while (!tile(x, y).isGround());
+        while (!tile(x, y).isGround() || creature(x, y) != null);
 
         creature.x = x;
         creature.y = y;
+        creatures.add(creature);
+    }
+
+    public void update() {
+        List<Creature> toUpdate = new ArrayList<Creature>(creatures);
+        for (Creature creature : toUpdate) {
+            creature.update();
+        }
+    }
+
+    public void remove(Creature other) {
+        creatures.remove(other);
     }
 }
