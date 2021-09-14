@@ -18,6 +18,7 @@ public class World {
         this.tiles = tiles;
         this.width = tiles.length;
         this.height = tiles[0].length;
+        this.creatures = new ArrayList<Creature>();
     }
 
     public Creature creature(int x, int y) {
