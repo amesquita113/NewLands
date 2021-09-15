@@ -56,6 +56,8 @@ public class PlayScreen implements Screen {
         // terminal.write(player.glyph(), player.x - left, player.y - top, player.color());
 
         terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 22);
+        String stats = String.format(" %3d/%3d hp", player.hp(), player.maxHp());
+        terminal.write(stats, 1, 23);
     }
 
     private void displayTiles(AsciiPanel terminal, int left, int top) {

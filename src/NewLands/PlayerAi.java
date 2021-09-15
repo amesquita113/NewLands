@@ -1,9 +1,14 @@
 package NewLands;
 
+import java.util.List;
+
 public class PlayerAi extends CreatureAi {
+
+    private List<String> messages;
 
     public PlayerAi(Creature creature) {
         super(creature);
+        this.messages = messages;
     }
 
     public void onEnter(int x, int y, Tile tile) {
@@ -13,6 +18,10 @@ public class PlayerAi extends CreatureAi {
         } else if (tile.isDiggable()) {
             creature.dig(x, y);
         }
+    }
+
+    public void onNotify(String message) {
+        messages.add(message);
     }
     
 }
