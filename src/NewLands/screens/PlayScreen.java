@@ -2,6 +2,8 @@ package NewLands.screens;
 
 import java.awt.event.KeyEvent;
 import asciiPanel.AsciiPanel;
+import java.util.ArrayList;
+import java.util.List;
 
 import NewLands.CreatureFactory;
 import NewLands.Creature;
@@ -14,10 +16,12 @@ public class PlayScreen implements Screen {
     private Creature player;   
     private int screenWidth;
     private int screenHeight;
+    private List<String> messages;
 
     public PlayScreen() {
         screenWidth = 80;
         screenHeight = 21;
+        messages = new ArrayList<String>();
         createWorld();
 
         CreatureFactory creatureFactory = new CreatureFactory(world);
@@ -25,7 +29,7 @@ public class PlayScreen implements Screen {
     }
 
     private void createCreatures(CreatureFactory creatureFactory) {
-        player = creatureFactory.newPlayer();
+        player = creatureFactory.newPlayer(messages);
 
         for (int i = 0; i < 8; i++) {
             creatureFactory.newFungus();
@@ -58,8 +62,17 @@ public class PlayScreen implements Screen {
         terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 22);
         String stats = String.format(" %3d/%3d hp", player.hp(), player.maxHp());
         terminal.write(stats, 1, 23);
+        displayMessages(terminal, messages);
     }
 
+    private void displayMessages(AsciiPanel terminal, List<String> messages) {
+        int top = screenHeight - messages.size();
+        for (int i = 0; i < messages.size(); i++) {
+            terminal.writeCenter(messages.get(i), top + i);
+        }
+        messages.clear();
+    }
+    
     private void displayTiles(AsciiPanel terminal, int left, int top) {
         for (int x = 0; x < screenWidth; x++){
             for (int y = 0; y < screenHeight; y++){
