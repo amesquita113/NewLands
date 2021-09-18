@@ -27,9 +27,9 @@ public class WorldBuilder {
     }
     
     private WorldBuilder randomizeTiles() {
-        for (int z = 0; z < depth; z++) {
+        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
+                for (int z = 0; z < depth; z++) {
                     tiles[x][y][z] = Math.random() < 0.5 ? Tile.FLOOR : Tile.WALL;
                 }
             }
@@ -41,9 +41,9 @@ public class WorldBuilder {
         Tile[][][] tiles2 = new Tile[width][height][depth];
         for (int time = 0; time < times; time++) {
 
-            for (int z = 0; z < depth; z++) {
+            for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
+                    for (int z = 0; z < depth; z++) {
                         int floors = 0;
                         int rocks = 0;
 
@@ -108,8 +108,11 @@ public class WorldBuilder {
             Point p = open.remove(0);
 
             for (Point neighbour : p.neighbours8()) {
+                if (neighbour.x < 0 || neighbour.y < 0 || neighbour.x >= width || neighbour.y >= height)
+                    continue;
+                
                 if (regions[neighbour.x][neighbour.y][neighbour.z] > 0
-                    || tiles[neighbour.x][neighbour.y][neighbour.z] == Tile.WALL)
+                        || tiles[neighbour.x][neighbour.y][neighbour.z] == Tile.WALL)
                     continue;
 
                 size++;
@@ -177,7 +180,7 @@ public class WorldBuilder {
 
     public WorldBuilder makeCaves() {
         return randomizeTiles()
-            .smooth(8)
+            .smooth(6)
             .createRegions()
             .connectRegions();
     }

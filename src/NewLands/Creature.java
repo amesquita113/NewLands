@@ -108,11 +108,13 @@ public class Creature {
         int r = 9;
         for (int ox = -r; ox < r + 1; ox++) {
             for (int oy = -r; oy < r + 1; oy++){
-                if (ox*ox + oy*oy > r*r) continue;
+                if (ox*ox + oy*oy > r*r) 
+                    continue;
 
                 Creature other = world.creature(x + ox, y + oy, z);
 
-                if (other == null) continue;
+                if (other == null) 
+                    continue;
 
                 if (other == this) 
                     other.notify("You " + message + ".", params);

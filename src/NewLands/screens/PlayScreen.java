@@ -1,10 +1,10 @@
 package NewLands.screens;
 
 import java.awt.event.KeyEvent;
-import asciiPanel.AsciiPanel;
 import java.util.ArrayList;
 import java.util.List;
 
+import asciiPanel.AsciiPanel;
 import NewLands.CreatureFactory;
 import NewLands.Creature;
 import NewLands.WorldBuilder;
@@ -39,7 +39,8 @@ public class PlayScreen implements Screen {
     }
     
     private void createWorld() {
-        world = new WorldBuilder(90, 32, 10)       // builds the world to specified dimensions (width, height, depth)
+        // System.out.println("Building world ... Please wait ...");
+        world = new WorldBuilder(90, 32, 2)       // builds the world to specified dimensions (width, height, depth)
                                 .makeCaves()    
                                 .build();
     }
