@@ -41,7 +41,7 @@ public class PlayScreen implements Screen {
     
     private void createWorld() {
         // System.out.println("Building world ... Please wait ...");
-        world = new WorldBuilder(90, 32, 2)       // builds the world to specified dimensions (width, height, depth)
+        world = new WorldBuilder(90, 32, 5)       // builds the world to specified dimensions (width, height, depth)
                                 .makeCaves()    
                                 .build();
     }
