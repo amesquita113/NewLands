@@ -8,7 +8,8 @@ public enum Tile {
     WALL((char)176, AsciiPanel.green),      // use a code page block character for walls
     STAIRS_DOWN('>', AsciiPanel.white),
     STAIRS_UP('<', AsciiPanel.white),
-    BOUNDS('x', AsciiPanel.brightBlack);    // use a 'x' character for boundries
+    BOUNDS('X', AsciiPanel.brightBlack),    // use a 'x' character for boundries
+    UNKNOWN(' ', AsciiPanel.white);
  
     private char glyph;
     public char glyph() { return glyph; }
