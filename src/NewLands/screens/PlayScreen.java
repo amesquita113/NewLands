@@ -8,6 +8,7 @@ import java.util.List;
 import asciiPanel.AsciiPanel;
 import NewLands.CreatureFactory;
 import NewLands.Creature;
+import NewLands.FieldOfView;
 import NewLands.WorldBuilder;
 import NewLands.World;
 
@@ -18,19 +19,21 @@ public class PlayScreen implements Screen {
     private int screenWidth;
     private int screenHeight;
     private List<String> messages;
+    private FieldOfView fov;
 
     public PlayScreen() {
         screenWidth = 80;
         screenHeight = 21;
         messages = new ArrayList<String>();
         createWorld();
+        fov = new FieldOfView(world);
 
         CreatureFactory creatureFactory = new CreatureFactory(world);
         createCreatures(creatureFactory);
     }
 
     private void createCreatures(CreatureFactory creatureFactory) {
-        player = creatureFactory.newPlayer(messages);
+        player = creatureFactory.newPlayer(messages, fov);
 
         for (int z = 0; z < world.depth(); z++) {
             for (int i = 0; i < 8; i++) {
@@ -60,13 +63,12 @@ public class PlayScreen implements Screen {
         int top = getScrollY();
 
         displayTiles(terminal, left, top);
+        displayMessages(terminal, messages);
 
-        // terminal.write(player.glyph(), player.x - left, player.y - top, player.color());
+        terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 23);
 
-        terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 22);
         String stats = String.format(" %3d/%3d hp", player.hp(), player.maxHp());
         terminal.write(stats, 1, 23);
-        displayMessages(terminal, messages);
     }
 
     private void displayMessages(AsciiPanel terminal, List<String> messages) {
@@ -78,20 +80,18 @@ public class PlayScreen implements Screen {
     }
     
     private void displayTiles(AsciiPanel terminal, int left, int top) {
+        fov.update(player.x, player.y, player.z, player.visionRadius());
+
+
         for (int x = 0; x < screenWidth; x++){
             for (int y = 0; y < screenHeight; y++){
                 int wx = x + left;
                 int wy = y + top;
 
-                if (player.canSee(wx, wy, player.z)){
-                    Creature creature = world.creature(wx, wy, player.z);
-                    if (creature != null)
-                        terminal.write(creature.glyph(), creature.x - left, creature.y - top, creature.color());
-                    else
-                        terminal.write(world.glyph(wx, wy, player.z), x, y, world.color(wx, wy, player.z));
-                } else {
-                    terminal.write(world.glyph(wx, wy, player.z), x, y, Color.darkGray);
-                }
+                if (player.canSee(wx, wy, player.z))
+                    terminal.write(world.glyph(wx, wy, player.z), x, y, world.color(wx, wy, player.z));
+                else
+                    terminal.write(fov.tile(wx, wy, player.z).glyph(), x, y, Color.darkGray);
             }
         }
     }

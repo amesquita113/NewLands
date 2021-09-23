@@ -41,6 +41,7 @@ public class Creature {
         this.hp = maxHp;
         this.attackValue = attack;
         this.defenseValue = defense;
+        this.visionRadius = 9;
     }
 
     public void moveBy(int mx, int my, int mz) {
@@ -121,7 +122,7 @@ public class Creature {
 
                 if (other == this) 
                     other.notify("You " + message + ".", params);
-                else
+                else if (other.canSee(x, y, z))
                     other.notify(String.format("The '%s' %s.", glyph, makeSecondPerson(message)), params);
             }
         }
