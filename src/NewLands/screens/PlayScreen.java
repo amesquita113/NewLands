@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asciiPanel.AsciiPanel;
-import NewLands.CreatureFactory;
+import NewLands.StuffFactory;
 import NewLands.Creature;
 import NewLands.FieldOfView;
 import NewLands.WorldBuilder;
@@ -28,11 +28,12 @@ public class PlayScreen implements Screen {
         createWorld();
         fov = new FieldOfView(world);
 
-        CreatureFactory creatureFactory = new CreatureFactory(world);
-        createCreatures(creatureFactory);
+        StuffFactory factory = new StuffFactory(world);
+        createCreatures(factory);
+        createItems(factory);
     }
 
-    private void createCreatures(CreatureFactory creatureFactory) {
+    private void createCreatures(StuffFactory creatureFactory) {
         player = creatureFactory.newPlayer(messages, fov);
 
         for (int z = 0; z < world.depth(); z++) {
@@ -54,6 +55,14 @@ public class PlayScreen implements Screen {
         world = new WorldBuilder(90, 32, 5)       // builds the world to specified dimensions (width, height, depth)
                                 .makeCaves()    
                                 .build();
+    }
+
+    private void createItems(StuffFactory factory) {
+        for (int z = 0; z < world.depth(); z++) {
+            for (int i = 0; i < world.width() * world.height() / 20; i++) {
+                factory.newRock(z);
+            }
+        }
     }
 
     public int getScrollX() {

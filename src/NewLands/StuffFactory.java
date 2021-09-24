@@ -4,10 +4,10 @@ import java.util.List;
 
 import asciiPanel.AsciiPanel;
 
-public class CreatureFactory {
+public class StuffFactory {
     private World world;
 
-    public CreatureFactory(World world) {
+    public StuffFactory(World world) {
         this.world = world;
     }
 
@@ -31,5 +31,11 @@ public class CreatureFactory {
         world.addAtEmptyLocation(bat, depth);
         new BatAi(bat);
         return bat;
+    }
+
+    public Item newRock(int depth) {
+        Item rock = new Item(',', AsciiPanel.yellow, "rock");
+        world.addAtEmptyLocation(rock, depth);
+        return rock;
     }
 }
