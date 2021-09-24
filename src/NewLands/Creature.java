@@ -33,7 +33,10 @@ public class Creature {
     private int visionRadius;
     public int visionRadius() { return visionRadius; }
 
-    public Creature(World world, char glyph, Color color, int maxHp, int attack, int defense) {
+    private String name;
+    public String name() { return name; }
+
+    public Creature(World world, char glyph, Color color, String name, int maxHp, int attack, int defense) {
         this.world = world;
         this.glyph = glyph;
         this.color = color;
@@ -42,9 +45,13 @@ public class Creature {
         this.attackValue = attack;
         this.defenseValue = defense;
         this.visionRadius = 9;
+        this.name = name;
     }
 
     public void moveBy(int mx, int my, int mz) {
+        if (mx == 0 && my == 0 && mz == 0)
+            return;
+
         Tile tile = world.tile(x + mx, y + my, z + mz);
 
         if (mz == -1) {
@@ -77,7 +84,7 @@ public class Creature {
 
         amount = (int)(Math.random() * amount) + 1;
 
-        doAction("attack the '%s' for %d damage", other.glyph, amount);
+        doAction("attack the '%s' for %d damage", other.name, amount);
 
         other.modifyHp(-amount);
     }
@@ -123,7 +130,7 @@ public class Creature {
                 if (other == this) 
                     other.notify("You " + message + ".", params);
                 else if (other.canSee(x, y, z))
-                    other.notify(String.format("The '%s' %s.", glyph, makeSecondPerson(message)), params);
+                    other.notify(String.format("The '%s' %s.", name, makeSecondPerson(message)), params);
             }
         }
     }
@@ -147,5 +154,9 @@ public class Creature {
 
     public Tile tile(int wx, int wy, int wz) {
         return world.tile(wx, wy, wz);
+    }
+
+    public Creature creature(int wx, int wy, int wz) {
+        return world.creature(wx, wy, wz);
     }
 }
