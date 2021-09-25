@@ -139,6 +139,8 @@ public class PlayScreen implements Screen {
         }
 
         switch (key.getKeyChar()) {
+            case 'g':
+            case ',': player.pickup(); break;
             case '<': player.moveBy(0, 0, -1); break;
             case '>': player.moveBy(0, 0, 1); break;
         }
