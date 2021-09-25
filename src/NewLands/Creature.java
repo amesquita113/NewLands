@@ -36,6 +36,9 @@ public class Creature {
     private String name;
     public String name() { return name; }
 
+    private Inventory inventory;
+    public Inventory inventory() { return inventory; }
+
     public Creature(World world, char glyph, Color color, String name, int maxHp, int attack, int defense) {
         this.world = world;
         this.glyph = glyph;
@@ -46,6 +49,7 @@ public class Creature {
         this.defenseValue = defense;
         this.visionRadius = 9;
         this.name = name;
+        this.inventory = new Inventory(20);
     }
 
     public void moveBy(int mx, int my, int mz) {
@@ -159,4 +163,25 @@ public class Creature {
     public Creature creature(int wx, int wy, int wz) {
         return world.creature(wx, wy, wz);
     }
+
+    public void pickup() {
+        Item item = world.item(x, y, z);
+
+        if (inventory.isFull() || item == null) {
+            doAction("grab at the ground");
+        } else {
+            doAction("pickup a %s", item.name());
+            world.remove(x, y, z);
+            inventory.add(item);
+        }
+    }
+
+    public void drop(Item item) {
+        if (world.addAtEmptySpace(item, x, y, z)) {
+            doAction("drop a " + item.name());
+            inventory.remove(item);
+        } else {
+            notify("There's nowhere to drop the %s.", item.name());
+        }
+    }    
 }

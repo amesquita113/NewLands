@@ -114,4 +114,39 @@ public class World {
 
         items[x][y][depth] = item;
     }
+
+    public void remove(int x, int y, int z) {
+        items[x][y][z] = null;
+    }
+
+    public boolean addAtEmptySpace(Item item, int x, int y, int z) {
+        if (item == null)
+            return true;
+
+        List<Point> points = new ArrayList<Point>();
+        List<Point> checked = new ArrayList<Point>();
+
+        points.add(new Point(x, y, z));
+
+        while (!points.isEmpty()) {
+            Point p = points.remove(0);
+            checked.add(p);
+
+            if (!tile(p.x, p.y, p.z).isGround())
+                continue;
+
+            if (items[p.x][p.y][p.z] == null) {
+                items[p.x][p.y][p.z] = item;
+                Creature c = this.creature(p.x, p.y, p.z);
+                if (c != null)
+                    c.notify("A %s lands between your feet.", item.name());
+                return true;
+            } else {
+                List<Point> neighbours = p.neighbours8();
+                neighbours.removeAll(checked);
+                points.addAll(neighbours);
+            }
+        }
+        return false;
+    }
 }
