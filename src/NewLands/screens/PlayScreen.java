@@ -60,12 +60,19 @@ public class PlayScreen implements Screen {
                                 .build();
     }
 
-    private void createItems(StuffFactory factory) {
+    private void createItems(StuffFactory factory) {    // adds rocks into the open tile spaces
         for (int z = 0; z < world.depth(); z++) {
             for (int i = 0; i < world.width() * world.height() / 20; i++) {
                 factory.newRock(z);
             }
         }
+
+        for (int z = 0; z < world.depth(); z++) {       // adds bread in 2 random locations per level
+            for (int i = 0; i < 2; i++) {
+                factory.newBread(z);
+            }
+        }
+
         factory.newVictoryItem(world.depth() - 1);
     }
 
@@ -87,7 +94,7 @@ public class PlayScreen implements Screen {
 
         // terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 23);
 
-        String stats = String.format(" %3d/%3d hp  %8s", player.hp(), player.maxHp(), hunger());
+        String stats = String.format(" %3d/%3d HP - %8s", player.hp(), player.maxHp(), hunger());
         terminal.write(stats, 1, 23);
 
         if (subscreen != null)
@@ -96,21 +103,24 @@ public class PlayScreen implements Screen {
 
     private String hunger() {
         if (player.food() < player.maxFood() * 0.1)
-            return "Starving";
+            return "Starved...";
         else if (player.food() < player.maxFood() * 0.2)
+            return "Starving";
+        else if (player.food() < player.maxFood() * 0.4)
             return "Hungry";
         else if (player.food() > player.maxFood() * 0.9)
             return "Stuffed";
         else if (player.food() > player.maxFood() * 0.8)
             return "Full";
         else 
-            return "";
+            return "Well fed";
     }
 
     private void displayMessages(AsciiPanel terminal, List<String> messages) {
         int top = screenHeight - messages.size();
         for (int i = 0; i < messages.size(); i++) {
-            terminal.writeCenter(messages.get(i), top + i);
+            // terminal.writeCenter(messages.get(i), top + i + 2);
+            terminal.write(messages.get(i), 30, top + i + 2);
         }
         messages.clear();
     }

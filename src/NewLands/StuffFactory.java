@@ -42,7 +42,7 @@ public class StuffFactory {
     public Item newBread(int depth) {
         Item bread = new Item('B', AsciiPanel.brightWhite, "bread");
         world.addAtEmptyLocation(bread, depth);
-        bread.modifyFoodValue(100);
+        bread.modifyFoodValue(500);
         return bread;
     }
 

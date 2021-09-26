@@ -56,7 +56,7 @@ public class Creature {
         this.visionRadius = 9;
         this.name = name;
         this.inventory = new Inventory(20);
-        this.maxFood = 1000;
+        this.maxFood = 1500;
         this.food = maxFood / 3 * 2;
     }
 
@@ -217,7 +217,7 @@ public class Creature {
             notify("You can't believe your stomach can hold that much!");
             modifyHp(-1);
         } else if (food < 1 && isPlayer()) {
-            modifyHp(-1000);
+            modifyHp(-1);
         }
     }
 
@@ -228,5 +228,9 @@ public class Creature {
     public void eat(Item item) {
         modifyFood(item.foodValue());
         inventory.remove(item);
+        if (hp < maxHp) {
+            hp += item.foodValue() * 0.25;
+            if (hp > maxHp) hp = maxHp;
+        }
     }
 }
