@@ -87,11 +87,24 @@ public class PlayScreen implements Screen {
 
         // terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 23);
 
-        String stats = String.format(" %3d/%3d hp", player.hp(), player.maxHp());
+        String stats = String.format(" %3d/%3d hp  %8s", player.hp(), player.maxHp(), hunger());
         terminal.write(stats, 1, 23);
 
         if (subscreen != null)
             subscreen.displayOutput(terminal);
+    }
+
+    private String hunger() {
+        if (player.food() < player.maxFood() * 0.1)
+            return "Starving";
+        else if (player.food() < player.maxFood() * 0.2)
+            return "Hungry";
+        else if (player.food() > player.maxFood() * 0.9)
+            return "Stuffed";
+        else if (player.food() > player.maxFood() * 0.8)
+            return "Full";
+        else 
+            return "";
     }
 
     private void displayMessages(AsciiPanel terminal, List<String> messages) {
@@ -145,6 +158,7 @@ public class PlayScreen implements Screen {
                 case KeyEvent.VK_B: player.moveBy(-1, 1, 0); break;
                 case KeyEvent.VK_N: player.moveBy( 1, 1, 0); break;
                 case KeyEvent.VK_D: subscreen = new DropScreen(player); break;
+                case KeyEvent.VK_E: subscreen = new EatScreen(player); break;
             }
         
             switch (key.getKeyChar()) {
