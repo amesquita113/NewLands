@@ -39,6 +39,13 @@ public class StuffFactory {
         return rock;
     }
 
+    public Item newBread(int depth) {
+        Item bread = new Item('B', AsciiPanel.brightWhite, "bread");
+        world.addAtEmptyLocation(bread, depth);
+        bread.modifyFoodValue(100);
+        return bread;
+    }
+
     public Item newVictoryItem(int depth) {
         Item item = new Item('*', AsciiPanel.brightWhite, "teddy bear");
         world.addAtEmptyLocation(item, depth);

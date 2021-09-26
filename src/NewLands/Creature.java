@@ -99,8 +99,6 @@ public class Creature {
         amount = (int)(Math.random() * amount) + 1;
 
         doAction("attack the '%s' for %d damage", other.name, amount);
-        // use 1 food while attacking
-        modifyFood(-1);
 
         other.modifyHp(-amount);
     }
