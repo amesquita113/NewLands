@@ -67,10 +67,16 @@ public class PlayScreen implements Screen {
             }
         }
 
-        for (int z = 0; z < world.depth(); z++) {       // adds bread in 2 random locations per level
+        for (int z = 0; z < world.depth(); z++) {       // adds bread and apples in 2 random locations per level
             for (int i = 0; i < 2; i++) {
                 factory.newBread(z);
+                factory.newApple(z);
             }
+            
+            // adds one of these per level
+            factory.randomArmour(z);
+            factory.randomWeapon(z);
+            factory.randomWeapon(z);
         }
 
         factory.newVictoryItem(world.depth() - 1);
@@ -113,14 +119,14 @@ public class PlayScreen implements Screen {
         else if (player.food() > player.maxFood() * 0.8)
             return "Full";
         else 
-            return "Well fed";
+            return "Content";
     }
 
     private void displayMessages(AsciiPanel terminal, List<String> messages) {
         int top = screenHeight - messages.size();
         for (int i = 0; i < messages.size(); i++) {
-            // terminal.writeCenter(messages.get(i), top + i + 2);
-            terminal.write(messages.get(i), 30, top + i + 2);
+            terminal.writeCenter(messages.get(i), top + i + 2);
+            //terminal.write(messages.get(i), 30, top + i + 2);
         }
         messages.clear();
     }
@@ -169,6 +175,7 @@ public class PlayScreen implements Screen {
                 case KeyEvent.VK_N: player.moveBy( 1, 1, 0); break;
                 case KeyEvent.VK_D: subscreen = new DropScreen(player); break;
                 case KeyEvent.VK_E: subscreen = new EatScreen(player); break;
+                case KeyEvent.VK_W: subscreen = new EquipScreen(player); break;
             }
         
             switch (key.getKeyChar()) {
