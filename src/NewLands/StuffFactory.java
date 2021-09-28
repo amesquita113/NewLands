@@ -47,7 +47,7 @@ public class StuffFactory {
     }
 
     public Item newApple(int depth) {
-        Item apple = new Item('A', AsciiPanel.brightRed, "apple");
+        Item apple = new Item('a', AsciiPanel.brightRed, "apple");
         world.addAtEmptyLocation(apple, depth);
         apple.modifyFoodValue(500);
         return apple;
