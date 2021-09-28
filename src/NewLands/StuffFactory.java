@@ -33,12 +33,21 @@ public class StuffFactory {
         return bat;
     }
 
+    // Zombie, the first player hunting creature
+    public Creature newZombie(int depth, Creature player) {
+        Creature zombie = new Creature(world, 'z', AsciiPanel.white, "zombie", 50, 10, 10);
+        world.addAtEmptyLocation(zombie, depth);
+        new ZombieAi(zombie, player);
+        return zombie;
+    }
+
     public Item newRock(int depth) {
         Item rock = new Item(',', AsciiPanel.yellow, "rock");
         world.addAtEmptyLocation(rock, depth);
         return rock;
     }
 
+    // Bread, a high value food item
     public Item newBread(int depth) {
         Item bread = new Item('B', AsciiPanel.brightWhite, "bread");
         world.addAtEmptyLocation(bread, depth);
@@ -46,6 +55,7 @@ public class StuffFactory {
         return bread;
     }
 
+    // Apple, a high value food item
     public Item newApple(int depth) {
         Item apple = new Item('a', AsciiPanel.brightRed, "apple");
         world.addAtEmptyLocation(apple, depth);

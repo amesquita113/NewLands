@@ -41,14 +41,19 @@ public class PlayScreen implements Screen {
 
         for (int z = 0; z < world.depth(); z++) {
             
-            /* created 8 fungus per level */
+            // created 8 fungus per level
             for (int i = 0; i < 8; i++) {      
                 creatureFactory.newFungus(z);
             }
 
-            /* creates 15 bats per level */
+            // creates 15 bats per level
             for (int i = 0; i < 15; i++) {
                 creatureFactory.newBat(z);
+            }
+
+            // creates 3 zombies plus the level per level
+            for (int i = 0; i < z + 3; i++) {
+                creatureFactory.newZombie(z, player);
             }
         }
     }
