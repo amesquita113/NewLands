@@ -333,4 +333,9 @@ public class Creature {
         visionRadius += 1;
         doAction("look more aware");
     }
+
+    public String details() {
+        return String.format("     level:%d    attack:%d    defense:%d    hp:%d",
+            level, attackValue(), defenseValue(), hp);
+    }
 }
