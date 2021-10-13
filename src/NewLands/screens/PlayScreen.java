@@ -184,6 +184,11 @@ public class PlayScreen implements Screen {
                 case KeyEvent.VK_E: subscreen = new EatScreen(player); break;
                 case KeyEvent.VK_W: subscreen = new EquipScreen(player); break;
                 case KeyEvent.VK_R: subscreen = new UnEquipScreen(player); break;
+                case KeyEvent.VK_X: subscreen = new ExamineScreen(player); break;
+                case KeyEvent.VK_SEMICOLON: subscreen = new LookScreen(player, "Looking",
+                                                                        player.x - getScrollX(),
+                                                                        player.y - getScrollY());
+                                                                        break;
             }
         
             switch (key.getKeyChar()) {
