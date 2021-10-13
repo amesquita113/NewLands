@@ -225,12 +225,22 @@ public class Creature {
         return ai.canSee(wx, wy, wz);
     }
 
-    public Tile tile(int wx, int wy, int wz) {
+    public Tile realTile(int wx, int wy, int wz) {
         return world.tile(wx, wy, wz);
     }
 
+    public Tile tile(int wx, int wy, int wz) {
+        if (canSee(wx, wy, wz))
+            return world.tile(wx, wy, wz);
+        else
+            return ai.rememberedTile(wx, wy, wz);
+    }
+
     public Creature creature(int wx, int wy, int wz) {
-        return world.creature(wx, wy, wz);
+        if (canSee(wx, wy, wz))
+            return world.creature(wx, wy, wz);
+        else
+            return null;
     }
 
     public void pickup() {
@@ -337,5 +347,12 @@ public class Creature {
     public String details() {
         return String.format("     level:%d    attack:%d    defense:%d    hp:%d",
             level, attackValue(), defenseValue(), hp);
+    }
+
+    public Item item(int wx, int wy, int wz) {
+        if (canSee(wx, wy, wz)) 
+            return world.item(wx, wy, wz);
+        else  
+            return null;
     }
 }
