@@ -71,7 +71,7 @@ public class StuffFactory {
     }
 
     public Item newDagger(int depth) {
-        Item item = new Item(')', AsciiPanel.white, "dagger");
+        Item item = new Item('|', AsciiPanel.white, "dagger");
         item.modifyAttackValue(5);
         item.modifyThrownAttackValue(5);
         world.addAtEmptyLocation(item, depth);
@@ -79,7 +79,7 @@ public class StuffFactory {
     }
 
     public Item newSword(int depth) {
-        Item item = new Item(')', AsciiPanel.brightWhite, "sword");
+        Item item = new Item('|', AsciiPanel.brightWhite, "sword");
         item.modifyAttackValue(10);
         item.modifyThrownAttackValue(3);
         world.addAtEmptyLocation(item, depth);
@@ -87,7 +87,7 @@ public class StuffFactory {
     }
 
     public Item newStaff(int depth) {
-        Item item = new Item(')', AsciiPanel.yellow, "staff");
+        Item item = new Item('_', AsciiPanel.yellow, "staff");
         item.modifyAttackValue(5);
         item.modifyDefenseValue(3);
         item.modifyThrownAttackValue(3);
@@ -95,8 +95,16 @@ public class StuffFactory {
         return item;
     }
 
+    public Item newBow(int depth) {
+        Item item = new Item('}', AsciiPanel.yellow, "bow");
+        item.modifyAttackValue(1);
+        item.modifyRangedAttackValue(5);
+        world.addAtEmptyLocation(item, depth);
+        return item;
+    }
+
     public Item newLightArmour(int depth) {
-        Item item = new Item('[', AsciiPanel.green, "tunic");
+        Item item = new Item('(', AsciiPanel.green, "tunic");
         item.modifyDefenseValue(2);
         world.addAtEmptyLocation(item, depth);
         return item;
@@ -120,6 +128,7 @@ public class StuffFactory {
         switch ((int)(Math.random() * 3)) {
             case 0: return newDagger(depth);
             case 1: return newSword(depth);
+            case 2: return newBow(depth);
             default: return newStaff(depth);
         }
     }

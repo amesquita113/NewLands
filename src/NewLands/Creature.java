@@ -154,6 +154,21 @@ public class Creature {
             gainXp(other);
     }
 
+    public void rangedWeaponAttack(Creature other) {
+        modifyFood(-1);
+
+        int amount = Math.max(0, attackValue / 2 + weapon.rangedAttackValue() - other.defenseValue());
+
+        amount = (int)(Math.random() * amount) + 1;
+
+        doAction("fire a %s at the %s for %d damage", weapon.name(), other.name, amount);
+
+        other.modifyHp(-amount);
+
+        if (other.hp < 1)
+            gainXp(other);
+    }
+
     public void gainXp(Creature other) {
         int amount = other.maxHp
             + other.attackValue()

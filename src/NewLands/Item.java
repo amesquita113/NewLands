@@ -33,6 +33,11 @@ public class Item {
 
     public void modifyThrownAttackValue(int amount) { thrownAttackValue += amount; }
 
+    private int rangedAttackValue;
+    public int rangedAttackValue() { return rangedAttackValue; }
+
+    public void modifyRangedAttackValue(int amount) { rangedAttackValue += amount; }
+
     public Item(char glyph, Color color, String name) {
         this.glyph = glyph;
         this.color = color;
