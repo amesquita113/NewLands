@@ -43,6 +43,7 @@ public class StuffFactory {
 
     public Item newRock(int depth) {
         Item rock = new Item(',', AsciiPanel.yellow, "rock");
+        rock.modifyThrownAttackValue(5);
         world.addAtEmptyLocation(rock, depth);
         return rock;
     }
@@ -72,6 +73,7 @@ public class StuffFactory {
     public Item newDagger(int depth) {
         Item item = new Item(')', AsciiPanel.white, "dagger");
         item.modifyAttackValue(5);
+        item.modifyThrownAttackValue(5);
         world.addAtEmptyLocation(item, depth);
         return item;
     }
@@ -79,6 +81,7 @@ public class StuffFactory {
     public Item newSword(int depth) {
         Item item = new Item(')', AsciiPanel.brightWhite, "sword");
         item.modifyAttackValue(10);
+        item.modifyThrownAttackValue(3);
         world.addAtEmptyLocation(item, depth);
         return item;
     }
@@ -87,6 +90,7 @@ public class StuffFactory {
         Item item = new Item(')', AsciiPanel.yellow, "staff");
         item.modifyAttackValue(5);
         item.modifyDefenseValue(3);
+        item.modifyThrownAttackValue(3);
         world.addAtEmptyLocation(item, depth);
         return item;
     }

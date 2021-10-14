@@ -28,6 +28,11 @@ public class Item {
 
     public void modifyDefenseValue(int amount) { defenseValue += amount; }
 
+    private int thrownAttackValue;
+    public int thrownAttackValue() { return thrownAttackValue; }
+
+    public void modifyThrownAttackValue(int amount) { thrownAttackValue += amount; }
+
     public Item(char glyph, Color color, String name) {
         this.glyph = glyph;
         this.color = color;

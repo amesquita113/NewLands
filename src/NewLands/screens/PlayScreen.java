@@ -124,7 +124,7 @@ public class PlayScreen implements Screen {
         else if (player.food() > player.maxFood() * 0.8)
             return "Full";
         else 
-            return "Content";
+            return "Well fed";
     }
 
     private void displayMessages(AsciiPanel terminal, List<String> messages) {
@@ -189,6 +189,7 @@ public class PlayScreen implements Screen {
                                                                         player.x - getScrollX(),
                                                                         player.y - getScrollY());
                                                                         break;
+                case KeyEvent.VK_T: subscreen = new ThrowScreen(player, player.x - getScrollX(), player.y - getScrollY()); break;
             }
         
             switch (key.getKeyChar()) {

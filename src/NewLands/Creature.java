@@ -139,6 +139,21 @@ public class Creature {
             gainXp(other);
     }
 
+    private void throwAttack(Item item, Creature other) {
+        modifyFood(-1);
+
+        int amount = Math.max(0, attackValue / 2 + item.thrownAttackValue() - other.defenseValue());
+
+        amount = (int)(Math.random() * amount) + 1;
+
+        doAction("throw a %s at the %s for %d damage", item.name(), other.name, amount);
+
+        other.modifyHp(-amount);
+
+        if (other.hp < 1)
+            gainXp(other);
+    }
+
     public void gainXp(Creature other) {
         int amount = other.maxHp
             + other.attackValue()
@@ -354,5 +369,29 @@ public class Creature {
             return world.item(wx, wy, wz);
         else  
             return null;
+    }
+
+    public void throwItem(Item item, int wx, int wy, int wz) {
+        Point end = new Point(x, y, 0);
+
+        for (Point p : new Line(x, y, wx, wy)) {
+            if (!realTile(p.x, p.y, z).isGround())
+                break;
+            end = p;
+        }
+
+        wx = end.x;
+        wy = end.y;
+
+        Creature c = creature(wx, wy, wz);
+
+        if (c != null)
+            throwAttack(item,c);
+        else
+            doAction("throw a %s", item.name());
+
+        unequip(item);
+        inventory.remove(item);
+        world.addAtEmptySpace(item, wx, wy, wz);
     }
 }
