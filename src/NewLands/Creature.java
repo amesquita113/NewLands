@@ -123,9 +123,10 @@ public class Creature {
         if (other == null)
             ai.onEnter(x + mx, y + my, z + mz, tile);
         else
-            attack(other);
+            meleeAttack(other);
     }
 
+    /*
     public void attack(Creature other) {
         int amount = Math.max(0, attackValue() - other.defenseValue());
 
@@ -138,7 +139,13 @@ public class Creature {
         if (other.hp < 1)
             gainXp(other);
     }
+    */
 
+    public void meleeAttack(Creature other) {
+        commonAttack(other, attackValue(), "attack the %s for %d damage", other.name);
+    }
+
+    /*
     private void throwAttack(Item item, Creature other) {
         modifyFood(-1);
 
@@ -153,7 +160,13 @@ public class Creature {
         if (other.hp < 1)
             gainXp(other);
     }
+    */
 
+    private void throwAttack(Item item, Creature other) {
+        commonAttack(other, attackValue / 2 + item.thrownAttackValue(), "throw a %s at the %s for %d damage", item.name(), other.name);
+    }
+
+    /*
     public void rangedWeaponAttack(Creature other) {
         modifyFood(-1);
 
@@ -162,6 +175,32 @@ public class Creature {
         amount = (int)(Math.random() * amount) + 1;
 
         doAction("fire a %s at the %s for %d damage", weapon.name(), other.name, amount);
+
+        other.modifyHp(-amount);
+
+        if (other.hp < 1)
+            gainXp(other);
+    }
+    */
+
+    public void rangedWeaponAttack(Creature other) {
+        commonAttack(other, attackValue / 2 + weapon.rangedAttackValue(), "fire a %s at the %s for %d damage", weapon.name(), other.name);
+    }
+
+    private void commonAttack(Creature other, int attack, String action, Object ... params) {
+        modifyFood(-2);
+
+        int amount = Math.max(0, attack - other.defenseValue());
+
+        amount = (int)(Math.random() * amount) + 1;
+
+        Object[] params2 = new Object[params.length + 1];
+        for (int i = 0; i < params.length; i++) {
+            params2[i] = params[i];
+        }
+        params2[params2.length - 1] = amount;
+
+        doAction(action, params2);
 
         other.modifyHp(-amount);
 
@@ -317,12 +356,22 @@ public class Creature {
             notify("Gross!");
 
         modifyFood(item.foodValue());
-        inventory.remove(item);
-        unequip(item);
+        getRidOf(item);
         if (hp < maxHp && item.foodValue() > 0) {                       // food heals you for 1/10 of its food value
             hp += item.foodValue() * 0.1;
             if (hp > maxHp) hp = maxHp;
         }
+    }
+
+    private void getRidOf(Item item) {
+        inventory.remove(item);
+        unequip(item);
+    }
+
+    private void putAt(Item item, int wx, int wy, int wz) {
+        inventory.remove(item);
+        unequip(item);
+        world.addAtEmptySpace(item, wx, wy, wz);
     }
 
     public void unequip(Item item) {
@@ -405,8 +454,6 @@ public class Creature {
         else
             doAction("throw a %s", item.name());
 
-        unequip(item);
-        inventory.remove(item);
-        world.addAtEmptySpace(item, wx, wy, wz);
+        putAt(item, wx, wy, wz);
     }
 }
