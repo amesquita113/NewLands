@@ -99,4 +99,39 @@ public class CreatureAi {
         return creature.item(creature.x, creature.y, creature.z) != null
             && !creature.inventory().isFull();
     }
+
+    protected boolean canUseBetterEquipment() {
+        int currentWeaponRating = creature.weapon() == null ? 0 : creature.weapon().attackValue() + creature.weapon().rangedAttackValue();
+        int currentArmourRating = creature.armour() == null ? 0 : creature.armour().defenseValue();
+
+        for (Item item : creature.inventory().getItems()) {
+            if (item == null)
+                continue;
+
+            boolean isArmour = item.attackValue() + item.rangedAttackValue() < item.defenseValue();
+
+            if (item.attackValue() + item.rangedAttackValue() > currentWeaponRating
+                || isArmour && item.defenseValue() > currentArmourRating)
+                return true;
+        }
+
+        return false;
+    }
+
+    protected void useBetterEquipment() {
+        int currentWeaponRating = creature.weapon() == null ? 0 : creature.weapon().attackValue() + creature.weapon().rangedAttackValue();
+        int currentArmourRating = creature.armour() == null ? 0 : creature.armour().defenseValue();
+
+        for (Item item : creature.inventory().getItems()) {
+            if (item == null) 
+                continue;
+
+            boolean isArmour = item.attackValue() + item.rangedAttackValue() < item.defenseValue();
+
+            if (item.attackValue() + item.rangedAttackValue() > currentWeaponRating
+                || isArmour && item.defenseValue() > currentArmourRating) {
+                    creature.equip(item);
+            }
+        }
+    }
 }

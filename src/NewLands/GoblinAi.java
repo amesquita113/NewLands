@@ -9,7 +9,9 @@ public class GoblinAi extends CreatureAi {
     }
 
     public void onUpdate() {
-        if (canRangedWeaponAttack(player))
+        if (canUseBetterEquipment())
+            useBetterEquipment();
+        else if (canRangedWeaponAttack(player))
             creature.rangedWeaponAttack(player);
         else if (canThrowAt(player))
             creature.throwItem(getWeaponToThrow(), player.x, player.y, player.z);
