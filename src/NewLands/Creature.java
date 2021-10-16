@@ -1,6 +1,8 @@
 package NewLands;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Creature {
     private World world;
@@ -25,6 +27,7 @@ public class Creature {
     public int hp() { return hp; }
 
     private int attackValue;
+    public void modifyAttackValue(int value) { attackValue += value; }
     public int attackValue() { 
         return attackValue
         + (weapon == null ? 0 : weapon.attackValue())
@@ -32,6 +35,7 @@ public class Creature {
     }
 
     private int defenseValue;
+    public void modifyDefenseValue(int value) { defenseValue += value; }
     public int defenseValue() { 
         return defenseValue
         + (weapon == null ? 0 : weapon.defenseValue())
@@ -39,6 +43,7 @@ public class Creature {
     }
 
     private int visionRadius;
+    public void modifyVisionRadius(int value) { visionRadius += value; }
     public int visionRadius() { return visionRadius; }
 
     private String name;
@@ -61,11 +66,6 @@ public class Creature {
 
     private int xp;
     public int xp() { return xp; }
-
-    private int regenHpCooldown;
-    private int regenHpPer1000;
-    public void modifyRegenHpPer1000(int amount) { regenHpPer1000 += amount; }
-
     public void modifyXp(int amount) {
         xp += amount;
 
@@ -79,8 +79,15 @@ public class Creature {
         }
     }
 
+    private int regenHpCooldown;
+    private int regenHpPer1000;
+    public void modifyRegenHpPer1000(int amount) { regenHpPer1000 += amount; }
+
     private int level;
     public int level() { return level; }
+
+    private List<Effect> effects;
+    public List<Effect> effects() { return effects; }
 
     public Creature(World world, char glyph, Color color, String name, int maxHp, int attack, int defense) {
         this.world = world;
@@ -97,6 +104,7 @@ public class Creature {
         this.food = maxFood / 3 * 2;
         this.level = 1;
         this.regenHpPer1000 = 10;
+        this.effects = new ArrayList<Effect>();
     }
 
     public void moveBy(int mx, int my, int mz) {
@@ -207,7 +215,22 @@ public class Creature {
         // use 1 food for movement
         modifyFood(-1);
         regenerateHealth();
+        updateEffects();
         ai.onUpdate();
+    }
+
+    private void updateEffects() {
+        List<Effect> done = new ArrayList<Effect>();
+
+        for (Effect effect : effects) {
+            effect.update(this);
+            if (effect.isDone()) {
+                effect.end(this);
+                done.add(effect);
+            }
+        }
+
+        effects.removeAll(done);
     }
 
     private void regenerateHealth() {
@@ -321,9 +344,21 @@ public class Creature {
         return glyph == '@';
     }
 
+    public void quaff(Item item) {
+        doAction("quaff a " + item.name());
+        consume(item);
+    }
+
     public void eat(Item item) {
+        doAction("eat a " + item.name());
+        consume(item);
+    }
+
+    private void consume(Item item) {
         if (item.foodValue() < 0)
             notify("Gross!");
+
+        addEffect(item.quaffEffect());
 
         modifyFood(item.foodValue());
         getRidOf(item);
@@ -333,6 +368,14 @@ public class Creature {
         }
     }
 
+    private void addEffect(Effect effect) {
+        if (effect == null)
+            return;
+
+        effect.start(this);
+        effects.add(effect);
+    }
+ 
     private void getRidOf(Item item) {
         inventory.remove(item);
         unequip(item);

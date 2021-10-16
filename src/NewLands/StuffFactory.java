@@ -11,6 +11,7 @@ public class StuffFactory {
         this.world = world;
     }
 
+    /************************************ Player/NPC Section **************************************/
     public Creature newPlayer(List<String> messages, FieldOfView fov) {
         Creature player = new Creature(world, '@', AsciiPanel.brightWhite, "player", 100, 20, 5);
         world.addAtEmptyLocation(player, 0);
@@ -57,6 +58,7 @@ public class StuffFactory {
         return rock;
     }
 
+    /************************************ Food Section **************************************/
     // Bread, a high value food item
     public Item newBread(int depth) {
         Item bread = new Item('\'', AsciiPanel.brightWhite, "bread");
@@ -73,12 +75,81 @@ public class StuffFactory {
         return apple;
     }
 
+    /************************************ Potion Section **************************************/
+    // +15 health potion
+    public Item newPotionOfHealth(int depth) {
+        Item item = new Item('!', AsciiPanel.white, "health potion");
+        item.setQuaffEffect(new Effect(1){
+            public void start(Creature creature) {
+                if (creature.hp() == creature.maxHp())
+                    return;
+
+                creature.modifyHp(15);
+                creature.doAction("look healthies");
+            }
+        });
+
+        world.addAtEmptyLocation(item, depth);
+        return item;
+    }
+
+    // poison potion
+    public Item newPotionOfPoison(int depth) {
+        Item item = new Item('!', AsciiPanel.white, "poison potion");
+        item.setQuaffEffect(new Effect(20){
+            public void start(Creature creature) {
+                creature.doAction("look sick");
+            }
+
+            public void update(Creature creature) {
+                super.update(creature);
+                creature.modifyHp(-1);
+            }
+        });
+
+        world.addAtEmptyLocation(item, depth);
+        return item;
+    }
+
+    // warriors potion - increases attack and defence by 5
+    public Item newPotionOfWarrior(int depth) {
+        Item item = new Item('!', AsciiPanel.white, "warrior's potion");
+        item.setQuaffEffect(new Effect(20){
+            public void start(Creature creature) {
+                creature.modifyAttackValue(5);
+                creature.modifyDefenseValue(5);
+                creature.doAction("look stronger");
+            }
+
+            public void end(Creature creature) {
+                creature.modifyAttackValue(-5);
+                creature.modifyDefenseValue(-5);
+                creature.doAction("look normal");
+            }
+        });
+
+        world.addAtEmptyLocation(item, depth);
+        return item;
+    }
+
+    // randomizer to create potions on the maps
+    public Item randomPotion(int depth) {
+        switch ((int)(Math.random() * 3)){
+            case 0: return newPotionOfHealth(depth);
+            case 1: return newPotionOfPoison(depth);
+            default: return newPotionOfWarrior(depth);
+        }
+    }
+
+    /************************************ Victory item Section **************************************/
     public Item newVictoryItem(int depth) {
         Item item = new Item('*', AsciiPanel.brightWhite, "teddy bear");
         world.addAtEmptyLocation(item, depth);
         return item;
     }
 
+
+    /************************************ Weapons Section **************************************/
     public Item newDagger(int depth) {
         Item item = new Item('|', AsciiPanel.white, "dagger");
         item.modifyAttackValue(5);
@@ -112,6 +183,7 @@ public class StuffFactory {
         return item;
     }
 
+    /************************************ Armour Section **************************************/
     public Item newLightArmour(int depth) {
         Item item = new Item('(', AsciiPanel.green, "tunic");
         item.modifyDefenseValue(2);

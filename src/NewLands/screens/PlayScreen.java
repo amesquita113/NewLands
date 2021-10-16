@@ -81,12 +81,19 @@ public class PlayScreen implements Screen {
             for (int i = 0; i < 2; i++) {
                 factory.newBread(z);
                 factory.newApple(z);
+                factory.randomPotion(z);
             }
             
             // adds one of these per level
             factory.randomArmour(z);
             factory.randomWeapon(z);
             factory.randomWeapon(z);
+            
+            /*
+            for (int i = 0; i < 20 + z; i++) {
+                factory.randomPotion(z);
+            }
+            */
         }
 
         factory.newVictoryItem(world.depth() - 1);
@@ -204,6 +211,7 @@ public class PlayScreen implements Screen {
                         subscreen = new FireWeaponScreen(player, player.x - getScrollX(),
                                                                 player.y - getScrollY()); 
                                                                 break;
+                case KeyEvent.VK_Q: subscreen = new QuaffScreen(player); break;
             }
         
             switch (key.getKeyChar()) {
