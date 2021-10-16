@@ -382,6 +382,11 @@ public class Creature {
         }
     }
 
+    public void gainHpRegen() {
+        regenHpPer1000 += 2;
+        doAction("you feel life energy rushing through your body");
+    }
+
     public void gainMaxHp() {
         maxHp += 10;
         hp += 10;
