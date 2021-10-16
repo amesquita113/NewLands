@@ -232,6 +232,10 @@ public class Creature {
         Item corpse = new Item('%', color, name + " corpse");
         corpse.modifyFoodValue(maxHp * 3);
         world.addAtEmptySpace(corpse, x, y, z);
+        for (Item item : inventory.getItems()) {
+            if (item != null)
+                drop(item);
+        }
     }
 
     public void dig(int wx, int wy, int wz) {
@@ -388,10 +392,20 @@ public class Creature {
     }
 
     public void equip(Item item) {
-        if (item.attackValue() == 0 && item.defenseValue() == 0)
+        if (!inventory.contains(item)) {
+            if (inventory.isFull()) {
+                notify("Can't equip %s since you're holding too much stuff.", item.name());
+                return;
+            } else {
+                world.remove(item);
+                inventory.add(item);
+            }
+        }
+
+        if (item.attackValue() == 0 && item.rangedAttackValue() == 0 && item.defenseValue() == 0)
             return;
 
-        if (item.attackValue() >= item.defenseValue()) {
+        if (item.attackValue() + item.rangedAttackValue() >= item.defenseValue()) {
             unequip(weapon);
             doAction("weild a " + item.name());
             weapon = item;

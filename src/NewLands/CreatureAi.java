@@ -1,5 +1,7 @@
 package NewLands;
 
+import java.util.List;
+
 public class CreatureAi {
     protected Creature creature;
 
@@ -57,5 +59,44 @@ public class CreatureAi {
 
     public Tile rememberedTile(int wx, int wy, int wz) {
         return Tile.UNKNOWN;
+    }
+
+    public void hunt(Creature target) {
+        List<Point> points = new Path(creature, target.x, target.y).points();
+
+        int mx = points.get(0).x - creature.x;
+        int my = points.get(0).y - creature.y;
+
+        creature.moveBy(mx, my, 0);
+    }
+
+    public boolean canRangedWeaponAttack(Creature other) {
+        return creature.weapon() != null
+            && creature.weapon().rangedAttackValue() > 0
+            && creature.canSee(other.x, other.y, other.z);
+    }
+
+    public boolean canThrowAt(Creature other) {
+        return creature.canSee(other.x, other.y, other.z)
+            && getWeaponToThrow() != null;
+    }
+
+    public Item getWeaponToThrow() {
+        Item toThrow = null;
+
+        for (Item item : creature.inventory().getItems()) {
+            if (item == null || creature.weapon() == item || creature.armour() == item)
+                continue;
+
+            if (toThrow == null || item.thrownAttackValue() > toThrow.attackValue())
+                toThrow = item;
+        }
+
+        return toThrow;
+    }
+
+    public boolean canPickup() {
+        return creature.item(creature.x, creature.y, creature.z) != null
+            && !creature.inventory().isFull();
     }
 }

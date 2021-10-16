@@ -51,9 +51,14 @@ public class PlayScreen implements Screen {
                 creatureFactory.newBat(z);
             }
 
-            // creates 3 zombies plus the level per level
-            for (int i = 0; i < z + 3; i++) {
+            // creates 4 zombies plus the level per level
+            for (int i = 0; i < z + 4; i++) {
                 creatureFactory.newZombie(z, player);
+            }
+
+            // creates 1 goblins plus the level per level
+            for (int i = 0; i < z + 1; i++) {
+                creatureFactory.newGoblin(z, player);
             }
         }
     }
