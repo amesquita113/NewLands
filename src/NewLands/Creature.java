@@ -62,6 +62,10 @@ public class Creature {
     private int xp;
     public int xp() { return xp; }
 
+    private int regenHpCooldown;
+    private int regenHpPer1000;
+    public void modifyRegenHpPer1000(int amount) { regenHpPer1000 += amount; }
+
     public void modifyXp(int amount) {
         xp += amount;
 
@@ -91,6 +95,8 @@ public class Creature {
         this.inventory = new Inventory(20);
         this.maxFood = 1500;
         this.food = maxFood / 3 * 2;
+        this.level = 1;
+        this.regenHpPer1000 = 10;
     }
 
     public void moveBy(int mx, int my, int mz) {
@@ -126,62 +132,13 @@ public class Creature {
             meleeAttack(other);
     }
 
-    /*
-    public void attack(Creature other) {
-        int amount = Math.max(0, attackValue() - other.defenseValue());
-
-        amount = (int)(Math.random() * amount) + 1;
-
-        doAction("attack the '%s' for %d damage", other.name, amount);
-
-        other.modifyHp(-amount);
-
-        if (other.hp < 1)
-            gainXp(other);
-    }
-    */
-
     public void meleeAttack(Creature other) {
         commonAttack(other, attackValue(), "attack the %s for %d damage", other.name);
     }
 
-    /*
-    private void throwAttack(Item item, Creature other) {
-        modifyFood(-1);
-
-        int amount = Math.max(0, attackValue / 2 + item.thrownAttackValue() - other.defenseValue());
-
-        amount = (int)(Math.random() * amount) + 1;
-
-        doAction("throw a %s at the %s for %d damage", item.name(), other.name, amount);
-
-        other.modifyHp(-amount);
-
-        if (other.hp < 1)
-            gainXp(other);
-    }
-    */
-
     private void throwAttack(Item item, Creature other) {
         commonAttack(other, attackValue / 2 + item.thrownAttackValue(), "throw a %s at the %s for %d damage", item.name(), other.name);
     }
-
-    /*
-    public void rangedWeaponAttack(Creature other) {
-        modifyFood(-1);
-
-        int amount = Math.max(0, attackValue / 2 + weapon.rangedAttackValue() - other.defenseValue());
-
-        amount = (int)(Math.random() * amount) + 1;
-
-        doAction("fire a %s at the %s for %d damage", weapon.name(), other.name, amount);
-
-        other.modifyHp(-amount);
-
-        if (other.hp < 1)
-            gainXp(other);
-    }
-    */
 
     public void rangedWeaponAttack(Creature other) {
         commonAttack(other, attackValue / 2 + weapon.rangedAttackValue(), "fire a %s at the %s for %d damage", weapon.name(), other.name);
@@ -249,8 +206,17 @@ public class Creature {
     public void update() {
         // use 1 food for movement
         modifyFood(-1);
-
+        regenerateHealth();
         ai.onUpdate();
+    }
+
+    private void regenerateHealth() {
+        regenHpCooldown -= regenHpPer1000;
+        if (regenHpCooldown < 0) {
+            modifyHp(1);
+            modifyFood(-1);
+            regenHpCooldown += 1000;
+        }
     }
 
     public boolean canEnter(int  wx, int wy, int wz) {
