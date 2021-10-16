@@ -59,7 +59,7 @@ public class StuffFactory {
 
     // Bread, a high value food item
     public Item newBread(int depth) {
-        Item bread = new Item('B', AsciiPanel.brightWhite, "bread");
+        Item bread = new Item('\'', AsciiPanel.brightWhite, "bread");
         world.addAtEmptyLocation(bread, depth);
         bread.modifyFoodValue(300);
         return bread;
@@ -67,7 +67,7 @@ public class StuffFactory {
 
     // Apple, a high value food item
     public Item newApple(int depth) {
-        Item apple = new Item('a', AsciiPanel.brightRed, "apple");
+        Item apple = new Item('\'', AsciiPanel.brightRed, "apple");
         world.addAtEmptyLocation(apple, depth);
         apple.modifyFoodValue(500);
         return apple;
