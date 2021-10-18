@@ -18,8 +18,14 @@ public class LevelUpController {
         new LevelUpOption("Increased vision"){
             public void invoke(Creature creature) { creature.gainVision(); }
         },
-        new LevelUpOption("Increased recovery"){
+        new LevelUpOption("Increased health recovery"){
             public void invoke(Creature creature) { creature.gainHpRegen(); }
+        },
+        new LevelUpOption("Increased mana"){
+            public void invoke(Creature creature) { creature.gainMaxMana(); }
+        },
+        new LevelUpOption("Increased mana recovery"){
+            public void invoke(Creature creature) { creature.gainRegenMana(); }
         }
     };
 

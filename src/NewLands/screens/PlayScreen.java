@@ -88,6 +88,10 @@ public class PlayScreen implements Screen {
             factory.randomArmour(z);
             factory.randomWeapon(z);
             factory.randomWeapon(z);
+
+            for (int i = 0; i < z + 1; i++) {
+                factory.randomSpellBook(z);
+            }
             
             /*
             for (int i = 0; i < 20 + z; i++) {
@@ -117,7 +121,8 @@ public class PlayScreen implements Screen {
 
         // terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 23);
 
-        String stats = String.format(" %3d/%3d HP - %8s", player.hp(), player.maxHp(), hunger());
+        String stats = String.format("%d Level   %3d/%3d Health  %d/%d Mana - %8s", player.level(), player.hp(), player.maxHp(),
+                                                                                    player.mana(), player.maxMana(), hunger());
         terminal.write(stats, 1, 23);
 
         if (subscreen != null)
@@ -195,7 +200,7 @@ public class PlayScreen implements Screen {
                 case KeyEvent.VK_D: subscreen = new DropScreen(player); break;
                 case KeyEvent.VK_E: subscreen = new EatScreen(player); break;
                 case KeyEvent.VK_W: subscreen = new EquipScreen(player); break;
-                case KeyEvent.VK_R: subscreen = new UnEquipScreen(player); break;
+                case KeyEvent.VK_O: subscreen = new UnEquipScreen(player); break;
                 case KeyEvent.VK_X: subscreen = new ExamineScreen(player); break;
                 case KeyEvent.VK_SEMICOLON: subscreen = new LookScreen(player, "Looking",
                                                                         player.x - getScrollX(),
@@ -212,6 +217,7 @@ public class PlayScreen implements Screen {
                                                                 player.y - getScrollY()); 
                                                                 break;
                 case KeyEvent.VK_Q: subscreen = new QuaffScreen(player); break;
+                case KeyEvent.VK_R: subscreen = new ReadScreen(player, player.x - getScrollX(), player.y - getScrollY()); break;
             }
         
             switch (key.getKeyChar()) {
