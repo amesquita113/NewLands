@@ -121,7 +121,7 @@ public class PlayScreen implements Screen {
 
         // terminal.writeCenter("--- press [ESC] to lose or [Enter] to win ---", 23);
 
-        String stats = String.format("%d Level   %3d/%3d Health  %d/%d Mana - %8s", player.level(), player.hp(), player.maxHp(),
+        String stats = String.format("Level %d    %3d/%3d Health   %d/%d Mana - %8s", player.level(), player.hp(), player.maxHp(),
                                                                                     player.mana(), player.maxMana(), hunger());
         terminal.write(stats, 1, 23);
 
