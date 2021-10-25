@@ -18,6 +18,11 @@ public class PlayerAi extends CreatureAi {
             creature.x = x;
             creature.y = y;
             creature.z = z;
+
+            Item item = creature.item(creature.x, creature.y, creature.z);
+            if (item != null)
+                creature.notify("There's a " + item.name() + " here.");
+                
         } else if (tile.isDiggable()) {
             creature.dig(x, y, z);
         }
