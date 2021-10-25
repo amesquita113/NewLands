@@ -9,7 +9,9 @@ public class Spell {
     public int manaCost() { return manaCost; }
 
     private Effect effect;
-    public Effect effect() { return new Effect(effect); }
+    public Effect effect() { return effect; }
+
+    public boolean requiresTarget() { return true; }
 
     public Spell(String name, int manaCost, Effect effect) {
         this.name = name;
