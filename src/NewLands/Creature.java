@@ -119,7 +119,7 @@ public class Creature {
         this.hp = maxHp;
         this.attackValue = attack;
         this.defenseValue = defense;
-        this.visionRadius = 9;
+        this.visionRadius = 6;
         this.name = name;
         this.inventory = new Inventory(20);
         this.maxFood = 1500;
